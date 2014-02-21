@@ -15,15 +15,22 @@ In order to use the plugin you need to take the following steps:
 6. put "pushover.py" to ~/.weechat/python
 7. start the plugin with "/python load pushover.py"
 8. Set user key and token by doing
-9. /set plugins.var.python.pushover.user USERKEY
-10. /set plugins.var.python.pushover.token TOKEN 
+9. `/set plugins.var.python.pushover.user USERKEY`
+10. `/set plugins.var.python.pushover.token TOKEN`
+
+Optional:
+
+* Set a custom pushover [sound](https://pushover.net/api#sounds):  `/set plugins.var.python.pushover.sound SOUND`
+* Enable/Disable notifications by setting the following to "on" or "off": `/set plugins.var.python.pushover.enabled OPTION`
+* Enable/Disable highlights/private messages by setting the following to "on" or "off": 
+`/set plugins.var.python.pushover.show_highlight OPTION`
+`/set plugins.var.python.pushover.show_priv_msg OPTION`
 
 ## Todo
 
-1. Get rid of curl dependency and use python itself to do the http call (non-blocking).
-2. Make it configurable to notify about current window or not.
-3. Make it configurable to notify only while being in away mode.
-4. Make it configurable to send more details (e.g. local timestamp).
+1. Make it configurable to notify about current window or not.
+2. Make it configurable to notify only while being in away mode.
+3. Make it configurable to send more details (e.g. local timestamp).
 
 ## Security
 
