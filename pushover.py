@@ -58,7 +58,8 @@ default_settings = {
     "enabled": ("on", "Turn plugin on/off"),
     "show_highlight": ("on", "Send notification on highlight"),
     "show_priv_msg": ("on", "Send notification on private message"),
-    "channel_excludes": ("", "Don't notify on these channels (CSV list)"),
+    "exclude_channels": ("", "Don't notify on these channels (CSV list)"),
+    "always_notify_channels": ("", "Always notify on these channels, regardless of hilight (CSV list)"),
 }
 
 required_settings = {
@@ -90,9 +91,11 @@ def notify_show(data, bufferp, uber_empty, tagsn, isdisplayed,
 
     # check if we should not notify on this channel/nick priv_msg
     channel = weechat.buffer_get_string(bufferp, "localvar_channel")
-    channel_excludes = weechat.config_get_plugin("channel_excludes").split(',')
-    if channel in channel_excludes:
+    exclude_channels = weechat.config_get_plugin("exclude_channels").split(',')
+    if channel in exclude_channels:
         return weechat.WEECHAT_RC_OK
+
+    always_notify_channels = weechat.config_get_plugin("always_notify_channels").split(',')
 
     # only notify if the message was not sent by myself
     if (weechat.buffer_get_string(bufferp, "localvar_type") == "private" and 
@@ -101,7 +104,10 @@ def notify_show(data, bufferp, uber_empty, tagsn, isdisplayed,
         
         show_notification(prefix, prefix, message)
 
-    elif ishighlight == "1" and weechat.config_get_plugin("show_highlight") == "on":
+    # notify on hilight or in always notifying channel and not sent by myself
+    elif (ishighlight == "1" and weechat.config_get_plugin("show_highlight") == "on") or \
+        (channel in always_notify_channels and prefix != mynick):
+
         buf = (weechat.buffer_get_string(bufferp, "short_name") or
                weechat.buffer_get_string(bufferp, "name"))
         show_notification(buf, prefix, message)
