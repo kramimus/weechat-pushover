@@ -25,6 +25,9 @@ Optional:
 * Enable/Disable highlights/private messages by setting the following to "on" or "off": 
 `/set plugins.var.python.pushover.show_highlight OPTION`
 `/set plugins.var.python.pushover.show_priv_msg OPTION`
+* Filter out messages in particular channels/nicks:
+`/set plugins.var.python.pushover.channel_excludes "somenick1,somechannel2"`
+To filter out Bitlbee chatter, exclude "root"
 
 ## Todo
 

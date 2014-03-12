@@ -57,7 +57,8 @@ default_settings = {
     "sound": ("", "Notification sound (blank for default).  See pushover website for sound options."),
     "enabled": ("on", "Turn plugin on/off"),
     "show_highlight": ("on", "Send notification on highlight"),
-    "show_priv_msg": ("on", "Send notification on private message")
+    "show_priv_msg": ("on", "Send notification on private message"),
+    "channel_excludes": ("", "Don't notify on these channels (CSV list)"),
 }
 
 required_settings = {
@@ -86,6 +87,12 @@ def notify_show(data, bufferp, uber_empty, tagsn, isdisplayed,
 
     # get local nick for buffer
     mynick = weechat.buffer_get_string(bufferp, "localvar_nick")
+
+    # check if we should not notify on this channel/nick priv_msg
+    channel = weechat.buffer_get_string(bufferp, "localvar_channel")
+    channel_excludes = weechat.config_get_plugin("channel_excludes").split(',')
+    if channel in channel_excludes:
+        return weechat.WEECHAT_RC_OK
 
     # only notify if the message was not sent by myself
     if (weechat.buffer_get_string(bufferp, "localvar_type") == "private" and 
