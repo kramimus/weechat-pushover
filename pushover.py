@@ -88,6 +88,8 @@ def notify_show(data, bufferp, uber_empty, tagsn, isdisplayed,
 
     # get local nick for buffer
     mynick = weechat.buffer_get_string(bufferp, "localvar_nick")
+    # strip channel op prefix
+    stripped_prefix = prefix.replace("@", "")
 
     # check if we should not notify on this channel/nick priv_msg
     channel = weechat.buffer_get_string(bufferp, "localvar_channel")
@@ -99,14 +101,14 @@ def notify_show(data, bufferp, uber_empty, tagsn, isdisplayed,
 
     # only notify if the message was not sent by myself
     if (weechat.buffer_get_string(bufferp, "localvar_type") == "private" and 
-        prefix != mynick and 
+        stripped_prefix != mynick and
         weechat.config_get_plugin("show_priv_msg") == "on"):
         
         show_notification(prefix, prefix, message)
 
     # notify on hilight or in always notifying channel and not sent by myself
     elif (ishighlight == "1" and weechat.config_get_plugin("show_highlight") == "on") or \
-        (channel in always_notify_channels and prefix != mynick):
+        (channel in always_notify_channels and stripped_prefix != mynick):
 
         buf = (weechat.buffer_get_string(bufferp, "short_name") or
                weechat.buffer_get_string(bufferp, "name"))
